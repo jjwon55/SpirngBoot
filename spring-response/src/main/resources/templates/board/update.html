@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 수정</title>         
+</head>
+<body>
+    <h1>게시글 수정</h1>
+    <form action="/board/update" id="form" method="post">
+        <input type="hidden" name="no" th:value="${board.no}">
+        <table border="1" th:object="${board}">
+            <tr>
+                <td>제목</td>
+                <td>
+                    <input type="text" th:field="*{title}"/>
+                    <!-- th:field="*{변수명}"➡ id="변수명" name="변수명" 까지 자동 렌더링 -->
+                </td>
+            </tr>
+            <tr>
+                <td>작성자</td>
+                <td>
+                    <input type="text" th:field="*{writer}"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea rows="5" cols="40" th:field="*{content}"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right">
+                    <button type="submit" onclick="update()">수정</button>
+                    <button type="submit" onclick="remove()">삭제</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div>
+        <!-- /board/insert?error ➡ ${param.error}-->
+        <th:block th:if="${ param.error}">
+            <span style="color: red;">게시글 수정 실패!</span>
+        </th>
+            
+    </div>
+
+    <script th:inline="javascript">
+        const error = [[${ param.error}]]
+        if(error)
+            alert("게시글 수정 실패!")
+    </script>
+
+    <script>
+
+        // 👨‍💻 모델 객체의 게시글 번호 가져오기
+        // Model 의 객체를 JavaScript 로 가져오는 방법
+        // ⭐ "[[${변수}]]"
+        let no = "[[$board.no]]"
+
+        // 수정 요청
+        function update() {
+
+            let form = document.getElementById("form")
+            let title = form.title.value 
+            let writer = form.writer.value 
+            let content = form.content.value 
+
+            let data = {
+                "no" : no,
+                "title" : title,
+                "writer" : writer,
+                "content" : content,
+            }
+
+            let request = new XMLHttpRequest()
+
+            request.onreadystatechange = function()  {
+                if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
+                    let response = request.responseText
+                    if (response == "SUCCESS") {
+                        alert(response)
+                        alert("수정성공")
+                        location.href = "/board/list"
+                    } else {
+                        alert("수정실패")
+                    }
+                }
+                if (request.readyState == XMLHttpRequest.DONE && request.status == 500) {
+                    let response = request.responseText
+                    alert(response)
+                    alert("수정실패")
+                }
+            }
+            let url = "/board"
+            request.open("PUT", url, true)
+            request.setRequestHeader("Content-Type", "application/json")
+            request.send( JSON.stringify(data))
+        }
+
+
+        // 삭제 요청
+        function remove() {
+            // method : DELETE
+            // url : /board?no=⭐
+            let check = confirm("정말로 삭제하시겠습니까?")
+            if( !check) return
+
+
+            let request = new XMLHttpRequest()
+
+            request.onreadystatechange = function()  {
+                if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
+                    let response = request.responseText
+                    if (response == "SUCCESS") {
+                        alert(response)
+                        alert("삭제성공")
+                        location.href = "/board/list"
+                    } else {
+                        alert("삭제실패")
+                    }
+                }
+                if (request.readyState == XMLHttpRequest.DONE && request.status == 500) {
+                    let response = request.responseText
+                    alert(response)
+                    alert("삭제실패")
+                }
+            }
+            let url = "/board?no=" + no
+            request.open("DELETE", url, true)
+            request.send()
+        }
+    </script>
+</body>
+</html>
