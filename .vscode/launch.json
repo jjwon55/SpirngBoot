@@ -19,6 +19,26 @@
             "projectName": "spring-mybatis",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ThymleafApplication<thymleaf>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.aloha.thymleaf.ThymleafApplication",
+            "projectName": "thymleaf",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-LayoutApplication<layout>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.aloha.layout.LayoutApplication",
+            "projectName": "layout",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
