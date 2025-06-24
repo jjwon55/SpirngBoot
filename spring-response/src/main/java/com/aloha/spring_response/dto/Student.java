@@ -1,8 +1,8 @@
 package com.aloha.spring_response.dto;
 
-import lombok.Data;
+// import lombok.Data;
 
-@Data
+// @Data
 public class Student extends Person{
     private int stdId;
     private String grade;
